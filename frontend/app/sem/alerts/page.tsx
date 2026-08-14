@@ -1,12 +1,12 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 import { ALERTS, type AlertRow } from "@/components/sem/data";
 import { Banner, PriorityTag, SampleTag, SemCard } from "@/components/sem/primitives";
 
 const LEVELS = ["全部", "P0", "P1", "P2", "P3"] as const;
+type Level = (typeof LEVELS)[number];
 
 function toneClass(tone: AlertRow["statusTone"]) {
   if (tone === "danger") return "sem-trend-down";
@@ -14,11 +14,16 @@ function toneClass(tone: AlertRow["statusTone"]) {
   return "sem-muted";
 }
 
-function AlertsInner() {
-  const params = useSearchParams();
-  const initial = params.get("level") === "P0" ? "P0" : "全部";
-  const [level, setLevel] = useState<(typeof LEVELS)[number]>(initial);
+export default function AlertsPage() {
+  const [level, setLevel] = useState<Level>("全部");
   const [q, setQ] = useState("");
+
+  useEffect(() => {
+    const raw = new URLSearchParams(window.location.search).get("level");
+    if (raw && (LEVELS as readonly string[]).includes(raw)) {
+      setLevel(raw as Level);
+    }
+  }, []);
 
   const rows = useMemo(() => {
     return ALERTS.filter((row) => {
@@ -97,13 +102,5 @@ function AlertsInner() {
         </div>
       </SemCard>
     </div>
-  );
-}
-
-export default function AlertsPage() {
-  return (
-    <Suspense fallback={<div className="sem-muted">加载预警…</div>}>
-      <AlertsInner />
-    </Suspense>
   );
 }
