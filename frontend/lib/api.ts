@@ -354,3 +354,22 @@ export type GeoChecklistItem = {
   status: string;
   notes: string | null;
 };
+
+export type AdsCampaign = {
+  id: string;
+  name: string;
+  status: string;
+};
+
+export type AdsStatus = {
+  configured: boolean;
+  connected: boolean;
+  has_test_account: boolean;
+  status: string;
+  customer_id: string | null;
+  mcc_id: string | null;
+  missing_env: string[];
+  present_env: string[];
+  note: string;
+  campaigns: AdsCampaign[];
+};

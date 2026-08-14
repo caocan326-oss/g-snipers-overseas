@@ -15,6 +15,7 @@ const nav = [
   { href: "/onsite", label: "站内改页" },
   { href: "/geo", label: "GEO 闭环" },
   { href: "/offsite", label: "外链核验与分发" },
+  { href: "/sem", label: "SEM" },
 ];
 
 export default function ConsoleLayout({ children }: { children: ReactNode }) {
